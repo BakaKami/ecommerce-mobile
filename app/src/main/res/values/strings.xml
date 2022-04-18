@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BottomNavigation</string>
+    <string name="home">Home</string>
+    <string name="wishlist">Wishlist</string>
+</resources>
