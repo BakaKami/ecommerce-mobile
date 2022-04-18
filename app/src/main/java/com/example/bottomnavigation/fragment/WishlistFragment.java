@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bottomnavigation.R;
-import com.example.bottomnavigation.adapter.ProductDataAdapter;
+import com.example.bottomnavigation.adapter.WishlistAdapter;
 import com.example.bottomnavigation.room.RoomDB;
-import com.example.bottomnavigation.room.model.ProductData;
+import com.example.bottomnavigation.room.model.WishlistData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +23,9 @@ public class WishlistFragment extends Fragment {
     RecyclerView recyclerView;
     ImageView btnRemove;
     RoomDB database;
-    ProductDataAdapter productDataAdapter;
+    WishlistAdapter productDataAdapter;
 
-    List<ProductData> dataList = new ArrayList<>();
+    List<WishlistData> dataList = new ArrayList<>();
 
     public WishlistFragment() {
         // Required empty public constructor
@@ -42,9 +42,9 @@ public class WishlistFragment extends Fragment {
         // initialize database
         database = RoomDB.getInstance(getActivity());
         // store database value in list
-        dataList = database.productDao().getAllData();
+        dataList = database.wishlistDao().getAllData();
         // initialize adapter
-        productDataAdapter = new ProductDataAdapter(dataList, getActivity());
+        productDataAdapter = new WishlistAdapter(dataList, getActivity());
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -52,7 +52,7 @@ public class WishlistFragment extends Fragment {
 
         // notify when data is inserted
         dataList.clear();
-        dataList.addAll(database.productDao().getAllData());
+        dataList.addAll(database.wishlistDao().getAllData());
         productDataAdapter.notifyDataSetChanged();
 
         return view;

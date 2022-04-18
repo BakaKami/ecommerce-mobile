@@ -1,7 +1,6 @@
-package com.example.bottomnavigation.room;
+package com.example.bottomnavigation.room.dao;
 
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -16,9 +15,9 @@ public interface ProductDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(ProductData productData);
 
-    @Delete
-    void delete(ProductData productData);
-
     @Query("SELECT * from product")
     List<ProductData> getAllData();
+
+    @Query("SELECT * from product WHERE id = :id")
+    ProductData getDataById(int id);
 }

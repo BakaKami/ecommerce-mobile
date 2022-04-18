@@ -6,9 +6,12 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.example.bottomnavigation.room.dao.ProductDao;
+import com.example.bottomnavigation.room.dao.WishlistDao;
 import com.example.bottomnavigation.room.model.ProductData;
+import com.example.bottomnavigation.room.model.WishlistData;
 
-@Database(entities = {ProductData.class}, version = 1, exportSchema = false)
+@Database(entities = {WishlistData.class, ProductData.class}, version = 3, exportSchema = false)
 public abstract class RoomDB extends RoomDatabase {
 
     // create database instance
@@ -27,6 +30,8 @@ public abstract class RoomDB extends RoomDatabase {
 
         return database;
     }
+
+    public abstract WishlistDao wishlistDao();
 
     public abstract ProductDao productDao();
 }

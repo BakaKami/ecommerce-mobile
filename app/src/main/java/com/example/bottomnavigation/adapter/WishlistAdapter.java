@@ -14,17 +14,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.bottomnavigation.R;
 import com.example.bottomnavigation.room.RoomDB;
-import com.example.bottomnavigation.room.model.ProductData;
+import com.example.bottomnavigation.room.model.WishlistData;
 
 import java.util.List;
 
-public class ProductDataAdapter extends RecyclerView.Adapter<ProductDataAdapter.ViewHolder> {
+public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHolder> {
 
-    private List<ProductData> dataList;
+    private List<WishlistData> dataList;
     private Context context;
     private RoomDB database;
 
-    public ProductDataAdapter(List<ProductData> dataList, Context context) {
+    public WishlistAdapter(List<WishlistData> dataList, Context context) {
         this.dataList = dataList;
         this.context = context;
         notifyDataSetChanged();
@@ -36,13 +36,13 @@ public class ProductDataAdapter extends RecyclerView.Adapter<ProductDataAdapter.
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.wishlist, parent, false);
 
-        return new ProductDataAdapter.ViewHolder(view);
+        return new WishlistAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // initialize product data
-        ProductData productData = dataList.get(position);
+        WishlistData productData = dataList.get(position);
         // initialize database
         database = RoomDB.getInstance(context);
 
@@ -60,9 +60,9 @@ public class ProductDataAdapter extends RecyclerView.Adapter<ProductDataAdapter.
             int i = holder.getAdapterPosition();
 
             // initialize product data
-            ProductData item = dataList.get(i);
+            WishlistData item = dataList.get(i);
             // delete from database
-            database.productDao().delete(item);
+            database.wishlistDao().delete(item);
             // notify changes
             dataList.remove(i);
             notifyItemRemoved(i);

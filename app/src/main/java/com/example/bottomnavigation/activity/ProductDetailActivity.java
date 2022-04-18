@@ -15,22 +15,18 @@ import com.example.bottomnavigation.model.ProductItem;
 import com.example.bottomnavigation.model.Rating;
 import com.example.bottomnavigation.room.RoomDB;
 import com.example.bottomnavigation.room.model.ProductData;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.bottomnavigation.room.model.WishlistData;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
-    public static final String EXTRA_PRODUCT = "extra_product";
-    public static final String EXTRA_RATING = "extra_rating";
+    public static final String CURRENT_ID = "current-id";
 
     String title, ratingRate, ratingCount, price, description, image;
     ImageView imgDetail;
     TextView tvTitle, tvRating, tvRatingCount, tvPrice, tvDescription;
-    ProductItem item;
-    Rating rating;
     Button btnBuy, btnAddWishlist;
 
+    ProductData productData;
     RoomDB database;
 
     @Override
@@ -38,29 +34,27 @@ public class ProductDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.item_detail);
 
+        database = RoomDB.getInstance(ProductDetailActivity.this);
+
         tvTitle = findViewById(R.id.tv_product_detail_title);
         tvRating = findViewById(R.id.tv_product_detail_rating);
         tvRatingCount = findViewById(R.id.tv_product_detail_rating_count);
         tvPrice = findViewById(R.id.tv_product_detail_price);
         tvDescription = findViewById(R.id.tv_product_detail_description);
         imgDetail = findViewById(R.id.img_product_detail);
-
         btnAddWishlist = findViewById(R.id.btn_add_wishlist);
         btnBuy = findViewById(R.id.btn_buy);
 
-        item = getIntent().getParcelableExtra(EXTRA_PRODUCT);
-        rating = getIntent().getParcelableExtra(EXTRA_RATING);
 
-        title = item.getTitle();
+        int currentId = getIntent().getExtras().getInt(CURRENT_ID);
 
-        if(rating != null){
-            ratingRate = Double.toString(rating.getRate());
-            ratingCount = Integer.toString(rating.getCount());
-        }
-
-        price = Double.toString(item.getPrice());
-        description = item.getDescription();
-        image = item.getImage();
+        productData = database.productDao().getDataById(currentId);
+        title = productData.getTitle();
+        ratingRate = Double.toString(productData.getRatingRate());
+        ratingCount = Integer.toString(productData.getRatingCount());
+        price = Double.toString(productData.getPrice());
+        description = productData.getDescription();
+        image = productData.getImage();
 
         tvTitle.setText(title);
         tvRating.setText(ratingRate);
@@ -72,24 +66,30 @@ public class ProductDetailActivity extends AppCompatActivity {
                 .into(imgDetail);
 
         btnAddWishlist.setOnClickListener(v -> {
-            ProductData newWishlist = new ProductData();
+            WishlistData newWishlist = new WishlistData();
             newWishlist.setTitle(title);
-            newWishlist.setCategory(item.getCategory()); // need to be filled
+            newWishlist.setCategory(productData.getCategory()); // need to be filled
             newWishlist.setDescription(description);
-            newWishlist.setId(item.getId()); // need to be filled
+            newWishlist.setProductId(productData.getId()); // need to be filled
             newWishlist.setImage(image);
             newWishlist.setPrice(Double.parseDouble(price));
             newWishlist.setRatingRate(Double.parseDouble(ratingRate));
             newWishlist.setRatingCount(Integer.parseInt(ratingCount));
 
-            database = RoomDB.getInstance(ProductDetailActivity.this);
-            database.productDao().insert(newWishlist);
+//            database = RoomDB.getInstance(ProductDetailActivity.this);
+            database.wishlistDao().insert(newWishlist);
 
             // TOAST here
-            Toast.makeText(this, "Wishlist added", Toast.LENGTH_SHORT);
+            Toast.makeText(this, "Wishlist added", Toast.LENGTH_SHORT)
+                    .show();
         });
 
-        if(getSupportActionBar() != null){
+        btnBuy.setOnClickListener(v -> {
+            Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT)
+                    .show();
+        });
+
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(title);
         }
 

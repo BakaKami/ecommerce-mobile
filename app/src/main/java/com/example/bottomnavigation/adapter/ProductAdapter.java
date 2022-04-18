@@ -19,6 +19,8 @@ import com.example.bottomnavigation.R;
 import com.example.bottomnavigation.activity.ProductDetailActivity;
 import com.example.bottomnavigation.model.ProductItem;
 import com.example.bottomnavigation.model.Rating;
+import com.example.bottomnavigation.room.RoomDB;
+import com.example.bottomnavigation.room.model.ProductData;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +29,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     private final Context context;
     private final List<ProductItem> resultList;
+    private RoomDB database;
 
     public ProductAdapter(Context context, List<ProductItem> resultList) {
         this.context = context;
@@ -45,24 +48,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         viewHolder.relativeLayout.setOnClickListener(v -> {
             Intent intent = new Intent(parent.getContext(), ProductDetailActivity.class);
             ProductItem item = new ProductItem();
-            item.setTitle(resultList.get(viewHolder.getAdapterPosition()).getTitle());
-
-            Rating rating = new Rating();
-            Optional.ofNullable(resultList.get(viewHolder.getAdapterPosition()).getRating()).ifPresent(ratingRepo -> {
-                rating.setRate(ratingRepo.getRate());
-                rating.setCount(ratingRepo.getCount());
-
-                item.setRating(rating);
-            });
-
-            item.setPrice(resultList.get(viewHolder.getAdapterPosition()).getPrice());
-            item.setDescription(resultList.get(viewHolder.getAdapterPosition()).getDescription());
-            item.setImage(resultList.get(viewHolder.getAdapterPosition()).getImage());
-            item.setCategory(resultList.get(viewHolder.getAdapterPosition()).getCategory());
             item.setId(resultList.get(viewHolder.getAdapterPosition()).getId());
 
-            intent.putExtra(ProductDetailActivity.EXTRA_PRODUCT, item);
-            intent.putExtra(ProductDetailActivity.EXTRA_RATING, rating);
+            intent.putExtra(ProductDetailActivity.CURRENT_ID, item.getId());
+
             parent.getContext().startActivity(intent);
         });
 
@@ -71,15 +60,34 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ProductAdapter.ViewHolder holder, int position) {
-        holder.tvTitle.setText(resultList.get(position).getTitle());
-        holder.tvCategory.setText(resultList.get(position).getCategory());
-        holder.tvRating.setText(Double.toString(resultList.get(position).getRating().getRate()));
-        holder.tvPrice.setText("$ " + resultList.get(position).getPrice());
+        ProductItem productItem = resultList.get(position);
+
+        holder.tvTitle.setText(productItem.getTitle());
+        holder.tvCategory.setText(productItem.getCategory());
+        holder.tvRating.setText(Double.toString(productItem.getRating().getRate()));
+        holder.tvPrice.setText("$ " + productItem.getPrice());
 
         // load picture
         Glide.with(context)
-                .load(resultList.get(position).getImage())
+                .load(productItem.getImage())
                 .into(holder.imgPoster);
+
+        // initialize database
+        database = RoomDB.getInstance(context);
+        // initialize new db object
+        ProductData productData = new ProductData();
+
+        productData.setRatingCount(productItem.getRating().getCount());
+        productData.setRatingRate(productItem.getRating().getRate());
+        productData.setPrice(productItem.getPrice());
+        productData.setDescription(productItem.getDescription());
+        productData.setId(productItem.getId());
+        productData.setCategory(productItem.getCategory());
+        productData.setTitle(productItem.getTitle());
+        productData.setImage(productItem.getImage());
+
+        // insert into db
+        database.productDao().insert(productData);
     }
 
     @Override
