@@ -1,11 +1,13 @@
 package com.example.bottomnavigation.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bottomnavigation.R;
+import com.example.bottomnavigation.activity.ProductDetailActivity;
+import com.example.bottomnavigation.model.ProductItem;
 import com.example.bottomnavigation.room.RoomDB;
 import com.example.bottomnavigation.room.model.WishlistData;
 
@@ -36,7 +40,20 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.wishlist, parent, false);
 
-        return new WishlistAdapter.ViewHolder(view);
+        WishlistAdapter.ViewHolder viewHolder = new WishlistAdapter.ViewHolder(view);
+
+        viewHolder.relativeLayout.setOnClickListener(v -> {
+            Intent intent = new Intent(parent.getContext(), ProductDetailActivity.class);
+//            ProductItem item = new ProductItem();
+//            item.setId(dataList.get(viewHolder.getAdapterPosition()).getProductId());
+            int currentId = dataList.get(viewHolder.getAdapterPosition()).getProductId();
+
+            intent.putExtra(ProductDetailActivity.CURRENT_ID, currentId);
+
+            parent.getContext().startActivity(intent);
+        });
+
+        return viewHolder;
     }
 
     @Override
@@ -80,6 +97,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
         Button btnAddWishlist;
         ImageView btnRemoveWishlist, imgPoster;
         TextView tvTitle, tvCategory, tvRating, tvPrice;
+        RelativeLayout relativeLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -91,6 +109,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
             tvCategory = itemView.findViewById(R.id.tv_wishlist_product_list_category);
             tvRating = itemView.findViewById(R.id.tv_wishlist_product_list_rating);
             tvPrice = itemView.findViewById(R.id.tv_wishlist_product_list_price);
+            relativeLayout = itemView.findViewById(R.id.layout_wishlist_product);
         }
     }
 }

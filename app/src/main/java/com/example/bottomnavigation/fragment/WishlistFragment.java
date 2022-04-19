@@ -23,9 +23,9 @@ public class WishlistFragment extends Fragment {
     RecyclerView recyclerView;
     ImageView btnRemove;
     RoomDB database;
-    WishlistAdapter productDataAdapter;
+    WishlistAdapter wishlistAdapter;
 
-    List<WishlistData> dataList = new ArrayList<>();
+    public static List<WishlistData> dataList = new ArrayList<>();
 
     public WishlistFragment() {
         // Required empty public constructor
@@ -44,16 +44,16 @@ public class WishlistFragment extends Fragment {
         // store database value in list
         dataList = database.wishlistDao().getAllData();
         // initialize adapter
-        productDataAdapter = new WishlistAdapter(dataList, getActivity());
+        wishlistAdapter = new WishlistAdapter(dataList, getActivity());
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(productDataAdapter);
+        recyclerView.setAdapter(wishlistAdapter);
 
         // notify when data is inserted
         dataList.clear();
         dataList.addAll(database.wishlistDao().getAllData());
-        productDataAdapter.notifyDataSetChanged();
+        wishlistAdapter.notifyDataSetChanged();
 
         return view;
     }

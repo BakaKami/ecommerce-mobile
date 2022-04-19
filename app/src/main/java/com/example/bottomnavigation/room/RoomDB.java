@@ -11,7 +11,7 @@ import com.example.bottomnavigation.room.dao.WishlistDao;
 import com.example.bottomnavigation.room.model.ProductData;
 import com.example.bottomnavigation.room.model.WishlistData;
 
-@Database(entities = {WishlistData.class, ProductData.class}, version = 3, exportSchema = false)
+@Database(entities = {WishlistData.class, ProductData.class}, version = 5, exportSchema = false)
 public abstract class RoomDB extends RoomDatabase {
 
     // create database instance

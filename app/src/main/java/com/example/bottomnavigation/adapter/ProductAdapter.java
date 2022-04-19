@@ -47,10 +47,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         ProductAdapter.ViewHolder viewHolder = new ProductAdapter.ViewHolder(view);
         viewHolder.relativeLayout.setOnClickListener(v -> {
             Intent intent = new Intent(parent.getContext(), ProductDetailActivity.class);
-            ProductItem item = new ProductItem();
-            item.setId(resultList.get(viewHolder.getAdapterPosition()).getId());
+//            ProductItem item = new ProductItem();
+//            item.setId(resultList.get(viewHolder.getAdapterPosition()).getId());
+            int currentId = resultList.get(viewHolder.getAdapterPosition()).getId();
 
-            intent.putExtra(ProductDetailActivity.CURRENT_ID, item.getId());
+            intent.putExtra(ProductDetailActivity.CURRENT_ID, currentId);
 
             parent.getContext().startActivity(intent);
         });
