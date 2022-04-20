@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.bottomnavigation.R;
 import com.example.bottomnavigation.activity.ProductDetailActivity;
+import com.example.bottomnavigation.fragment.WishlistFragment;
 import com.example.bottomnavigation.model.ProductItem;
 import com.example.bottomnavigation.room.RoomDB;
 import com.example.bottomnavigation.room.model.WishlistData;

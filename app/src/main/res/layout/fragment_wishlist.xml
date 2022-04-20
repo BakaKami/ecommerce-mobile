@@ -20,4 +20,11 @@
         android:layout_height="wrap_content"
         tools:listitem="@layout/wishlist" />
 
+    <TextView
+        android:id="@+id/tv_empty_wishlist_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="No item found in wishlist"
+        android:gravity="center"/>
+
 </FrameLayout>
